@@ -11,6 +11,7 @@ public class Dragpbject : MonoBehaviour
     private Vector3 startPos;
     private void Start()
     {
+        
         startPos = transform.position;
     }
     private void OnMouseDown()
@@ -18,6 +19,8 @@ public class Dragpbject : MonoBehaviour
         mZcord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
 
         mOffset = gameObject.transform.position - GetMouseWorldPos();
+
+
 
     }
     private Vector3 GetMouseWorldPos()
@@ -31,7 +34,10 @@ public class Dragpbject : MonoBehaviour
 
     private void OnMouseDrag()
     {
-        transform.position = GetMouseWorldPos() + mOffset + new Vector3(0,3,0);
+        Vector3 movingRange = GetMouseWorldPos() + mOffset + new Vector3(0, 3, 0);
+        movingRange.y = startPos.y;
+        transform.position = movingRange;
+        Debug.Log(Input.mousePosition);
     }
 
     private void OnMouseUp()
