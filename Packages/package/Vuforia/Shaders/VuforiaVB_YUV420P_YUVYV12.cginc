@@ -42,13 +42,6 @@ specific language governing permissions and limitations under the License.
 
 half4 vuforiaConvertRGBFrag(v2f i) : COLOR
 {
-    // Color conversion from YUV to RGB (ITU.BT-601):
-    // R = Y                       + 1.40200 * (V - 0.5)
-    // G = Y - 0.34414 * (U - 0.5) - 0.71414 * (V - 0.5)
-    // B = Y + 1.77200 * (U - 0.5)
-    //
-    // Last column of the transformation matrix is computed as: -0.5 * (C_U + C_Y)    
-    
     half4 c;
     half y = tex2D(_MainTex, i.uv ).r;
 #if VUFORIA_YUV420P
@@ -61,9 +54,9 @@ half4 vuforiaConvertRGBFrag(v2f i) : COLOR
 			
     half4 v4yuv1 = half4(y, u, v, 1.0);
 
-    c.r = dot(half4(1.00000,  0.00000,  1.40200, -0.70100), v4yuv1);
-    c.g = dot(half4(1.00000, -0.34414, -0.71414,  0.52914), v4yuv1);
-    c.b = dot(half4(1.00000,  1.77200,  0.00000, -0.88600), v4yuv1);
+    c.r = dot(half4(1.1640625,  0.000000000,  1.5957031250, -0.87060546875), v4yuv1);
+    c.g = dot(half4(1.1640625, -0.390625000, -0.8134765625,  0.52929687500), v4yuv1);
+    c.b = dot(half4(1.1640625,  2.017578125,  0.0000000000, -1.08154296875), v4yuv1);
     c.a = 1.0;
 
     return c;

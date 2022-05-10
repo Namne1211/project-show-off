@@ -5,15 +5,16 @@ Confidential and Proprietary - Protected under copyright and other laws.
 Vuforia is a trademark of PTC Inc., registered in the United States and other 
 countries.
 ===============================================================================*/
-#if UNITY_2020_1_OR_NEWER
-using UnityEngine.XR;
-#endif
+
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+#if UNITY_2020_1_OR_NEWER
+using UnityEngine.XR;
+#endif
 using Vuforia;
 using Vuforia.EditorClasses;
-using Vuforia.UnityRuntimeCompiled;
+using Vuforia.UnityRuntimeCompiled.ARFoundationIntegration;
 
 /// <summary>
 /// Creates connection between open source files and the Vuforia library.
@@ -26,27 +27,26 @@ public static class OpenSourceInitializer
 
     static OpenSourceInitializer()
     {
+        InitializeFacade();
         GameObjectFactory.SetDefaultBehaviourTypeConfiguration(new DefaultBehaviourAttacher());
         ReplacePlaceHolders();
-
-        InitializeFacade();
         ARFoundationInitializer.InitializeFacade();
     }
 
     static void ReplacePlaceHolders()
     {
-        var observerPlaceholders = Object.FindObjectsOfType<DefaultObserverBehaviourPlaceholder>().ToList();
+        var trackablePlaceholders = Object.FindObjectsOfType<DefaultTrackableBehaviourPlaceholder>().ToList();
         var initErrorsPlaceholders = Object.FindObjectsOfType<DefaultInitializationErrorHandlerPlaceHolder>().ToList();
-
-        observerPlaceholders.ForEach(ReplaceObserverPlaceHolder);
+        
+        trackablePlaceholders.ForEach(ReplaceTrackablePlaceHolder);
         initErrorsPlaceholders.ForEach(ReplaceInitErrorPlaceHolder);
     }
     
-    static void ReplaceObserverPlaceHolder(DefaultObserverBehaviourPlaceholder placeHolder)
+    static void ReplaceTrackablePlaceHolder(DefaultTrackableBehaviourPlaceholder placeHolder)
     {
         var go = placeHolder.gameObject;
-        var doeh = go.AddComponent<DefaultObserverEventHandler>();
-        SetDefaultObserverHandlerSettings(doeh);
+        var dteh = go.AddComponent<DefaultTrackableEventHandler>();
+        SetDefaultTrackableHandlerSettings(dteh);
 
         Object.DestroyImmediate(placeHolder);
     }
@@ -61,38 +61,32 @@ public static class OpenSourceInitializer
 
     class DefaultBehaviourAttacher : IDefaultBehaviourAttacher
     {
-        public void AddDefaultObserverEventHandler(GameObject go)
+        public void AddDefaultTrackableBehaviour(GameObject go)
         {
-            var dteh = go.AddComponent<DefaultObserverEventHandler>();
-            SetDefaultObserverHandlerSettings(dteh);
+            var dteh = go.AddComponent<DefaultTrackableEventHandler>();
+            SetDefaultTrackableHandlerSettings(dteh);
         }
 
-        public void AddDefaultAreaTargetEventHandler(GameObject go)
-        {
-            var eventHandler = go.AddComponent<DefaultAreaTargetEventHandler>();
-            SetDefaultObserverHandlerSettings(eventHandler);
-        }
-        
         public void AddDefaultInitializationErrorHandler(GameObject go)
         {
             go.AddComponent<DefaultInitializationErrorHandler>();
         }
     }
 
-    static void SetDefaultObserverHandlerSettings(DefaultObserverEventHandler doeh)
+    static void SetDefaultTrackableHandlerSettings(DefaultTrackableEventHandler dteh)
     {
-        if (doeh.gameObject.GetComponent<AnchorBehaviour>() != null)
+        if (dteh.gameObject.GetComponent<AnchorBehaviour>() != null)
         {
             // render anchors in LIMITED mode
-            doeh.StatusFilter = DefaultObserverEventHandler.TrackingStatusFilter.Tracked_ExtendedTracked_Limited;
+            dteh.StatusFilter = DefaultTrackableEventHandler.TrackingStatusFilter.Tracked_ExtendedTracked_Limited;
         }
         else
         {
             // the default for all other targets is not to consider LIMITED poses
-            doeh.StatusFilter = DefaultObserverEventHandler.TrackingStatusFilter.Tracked_ExtendedTracked;
+            dteh.StatusFilter = DefaultTrackableEventHandler.TrackingStatusFilter.Tracked_ExtendedTracked;
         }
     }
-    
+
     static void InitializeFacade()
     {
         if (sFacade != null) return;
@@ -124,4 +118,5 @@ public static class OpenSourceInitializer
 #endif
         }
     }
+
 }

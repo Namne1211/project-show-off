@@ -10,7 +10,7 @@
         "Editor"
     ],
     "precompiledReferences": [
-        "Vuforia.Unity.Engine.dll"
+        "Vuforia.UnityExtensions.dll"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

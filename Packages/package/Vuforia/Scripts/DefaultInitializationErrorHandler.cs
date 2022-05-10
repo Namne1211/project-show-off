@@ -17,14 +17,20 @@ using Vuforia;
 /// </summary>
 public class DefaultInitializationErrorHandler : VuforiaMonoBehaviour
 {
-    public void OnVuforiaInitializationError(VuforiaInitError vuforiaInitError)
+    #region Vuforia_lifecycle_events
+
+    public void OnVuforiaInitializationError(VuforiaUnity.InitError initError)
     {
-        if (vuforiaInitError != VuforiaInitError.NONE)
+        if (initError != VuforiaUnity.InitError.INIT_SUCCESS)
         {
-            SetErrorCode(vuforiaInitError);
+            SetErrorCode(initError);
             SetErrorOccurred(true);
         }
     }
+
+    #endregion // Vuforia_lifecycle_events
+
+    #region PRIVATE_MEMBER_VARIABLES
 
     string mErrorText = "";
     bool mErrorOccurred;
@@ -38,11 +44,15 @@ public class DefaultInitializationErrorHandler : VuforiaMonoBehaviour
     Texture2D bodyTexture;
     Texture2D headerTexture;
     Texture2D footerTexture;
-    
+
+    #endregion // PRIVATE_MEMBER_VARIABLES
+
+    #region UNTIY_MONOBEHAVIOUR_METHODS
+
     void Awake()
     {
         // Check for an initialization error on start.
-        VuforiaApplication.Instance.OnVuforiaInitialized += OnVuforiaInitializationError;
+        VuforiaRuntime.Instance.RegisterVuforiaInitErrorCallback(OnVuforiaInitializationError);
     }
 
     void Start()
@@ -62,8 +72,12 @@ public class DefaultInitializationErrorHandler : VuforiaMonoBehaviour
     /// </summary>
     void OnDestroy()
     {
-        VuforiaApplication.Instance.OnVuforiaInitialized -= OnVuforiaInitializationError;
+        VuforiaRuntime.Instance.UnregisterVuforiaInitErrorCallback(OnVuforiaInitializationError);
     }
+
+    #endregion // UNTIY_MONOBEHAVIOUR_METHODS
+
+    #region PRIVATE_METHODS
 
     void DrawWindowContent(int id)
     {
@@ -84,41 +98,41 @@ public class DefaultInitializationErrorHandler : VuforiaMonoBehaviour
         }
     }
 
-    void SetErrorCode(VuforiaInitError initError)
+    void SetErrorCode(VuforiaUnity.InitError errorCode)
     {
-        switch (initError)
-        {   
-            // case InitCode.INIT_EXTERNAL_DEVICE_NOT_DETECTED:
-            //     mErrorText =
-            //         "Failed to initialize the Vuforia Engine because this " +
-            //         "device is not docked with required external hardware.";
-            //     break;
-            case VuforiaInitError.LICENSE_CONFIG_MISSING_KEY:
+        switch (errorCode)
+        {
+            case VuforiaUnity.InitError.INIT_EXTERNAL_DEVICE_NOT_DETECTED:
+                mErrorText =
+                    "Failed to initialize the Vuforia Engine because this " +
+                    "device is not docked with required external hardware.";
+                break;
+            case VuforiaUnity.InitError.INIT_LICENSE_ERROR_MISSING_KEY:
                 mErrorText =
                     "Vuforia Engine App key is missing. Please get a valid key " +
                     "by logging into your account at developer.vuforia.com " +
                     "and creating a new project.";
                 break;
-            case VuforiaInitError.LICENSE_CONFIG_INVALID_KEY:
+            case VuforiaUnity.InitError.INIT_LICENSE_ERROR_INVALID_KEY:
                 mErrorText =
                     "Vuforia Engine App key is invalid. " +
                     "Please get a valid key by logging into your account at " +
                     "developer.vuforia.com and creating a new project. \n\n" +
                     getKeyInfo();
                 break;
-            case VuforiaInitError.LICENSE_CONFIG_NO_NETWORK_TRANSIENT:
+            case VuforiaUnity.InitError.INIT_LICENSE_ERROR_NO_NETWORK_TRANSIENT:
                 mErrorText = "Unable to contact server. Please try again later.";
                 break;
-            case VuforiaInitError.LICENSE_CONFIG_NO_NETWORK_PERMANENT:
+            case VuforiaUnity.InitError.INIT_LICENSE_ERROR_NO_NETWORK_PERMANENT:
                 mErrorText = "No network available. Please make sure you are connected to the Internet.";
                 break;
-            case VuforiaInitError.LICENSE_CONFIG_KEY_CANCELED:
+            case VuforiaUnity.InitError.INIT_LICENSE_ERROR_CANCELED_KEY:
                 mErrorText =
                     "This App license key has been cancelled and may no longer be used. " +
                     "Please get a new license key. \n\n" +
                     getKeyInfo();
                 break;
-            case VuforiaInitError.LICENSE_CONFIG_PRODUCT_TYPE_MISMATCH:
+            case VuforiaUnity.InitError.INIT_LICENSE_ERROR_PRODUCT_TYPE_MISMATCH:
                 mErrorText =
                     "Vuforia Engine App key is not valid for this product. Please get a valid key " +
                     "by logging into your account at developer.vuforia.com and choosing the " +
@@ -127,34 +141,29 @@ public class DefaultInitializationErrorHandler : VuforiaMonoBehaviour
                     "Note that Universal Windows Platform (UWP) apps require " +
                     "a license key created on or after August 9th, 2016.";
                 break;
-            case VuforiaInitError.DEVICE_NOT_SUPPORTED:
-                mErrorText = "Failed to initialize Vuforia Engine because this device is not supported.";
-                break;
-            case VuforiaInitError.PERMISSION_ERROR:
-                mErrorText =
-                    "One or more permissions required by Vuforia Engine are missing or not granted by user.\n" +
-                    "For example, the user may have denied camera access to this app.\n" +
-                    "In this case, you can enable camera access in Settings:\n" +
+            case VuforiaUnity.InitError.INIT_NO_CAMERA_ACCESS:
+                mErrorText = 
+                    "User denied Camera access to this app.\n" +
+                    "To restore, enable Camera access in Settings:\n" +
                     "Settings > Privacy > Camera > " + Application.productName + "\n" +
-                    "Also verify that the camera is enabled in:\n" +
+                    "Also verify that the Camera is enabled in:\n" +
                     "Settings > General > Restrictions.";
                 break;
-            case VuforiaInitError.LICENSE_ERROR:
-                mErrorText = "A valid license configuration is required.\n";
+            case VuforiaUnity.InitError.INIT_DEVICE_NOT_SUPPORTED:
+                mErrorText = "Failed to initialize Vuforia Engine because this device is not supported.";
                 break;
-            case VuforiaInitError.INITIALIZATION:
-            default:
+            case VuforiaUnity.InitError.INIT_ERROR:
                 mErrorText = "Failed to initialize Vuforia Engine.";
                 break;
         }
 
         // Prepend the error code in red
-        mErrorText = "<color=red>" + initError.ToString().Replace("_", " ") + "</color>\n\n" + mErrorText;
+        mErrorText = "<color=red>" + errorCode.ToString().Replace("_", " ") + "</color>\n\n" + mErrorText;
 
         // Remove rich text tags for console logging
         var errorTextConsole = mErrorText.Replace("<color=red>", "").Replace("</color>", "");
 
-        Debug.LogError("Vuforia Engine initialization failed: " + initError + "\n\n" + errorTextConsole);
+        Debug.LogError("Vuforia Engine initialization failed: " + errorCode + "\n\n" + errorTextConsole);
     }
 
     void SetErrorOccurred(bool errorOccurred)
@@ -226,4 +235,6 @@ public class DefaultInitializationErrorHandler : VuforiaMonoBehaviour
         texture.Apply();
         return texture;
     }
+
+    #endregion // PRIVATE_METHODS
 }

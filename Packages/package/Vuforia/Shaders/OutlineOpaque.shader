@@ -64,11 +64,10 @@ Shader "Custom/OutlineOpaque"
 				output.color = _SilhouetteColor;
 
 				// calculate silhouette in image space
-				float2 outlineNormal = normalize(TransformViewToProjection(mul((float3x3)UNITY_MATRIX_IT_MV, normalize(input.normal)).xy));
-				float2 silhouette = outlineNormal * _SilhouetteSize;
+				float2 silhouette   = TransformViewToProjection(mul((float3x3)UNITY_MATRIX_IT_MV, input.normal).xy) * _SilhouetteSize;
 
 				// add silhouette offset
-				output.position.xy += output.position.z * silhouette;
+				output.position.xy += output.position.z *  silhouette;
 				
 				return output;
 			}
