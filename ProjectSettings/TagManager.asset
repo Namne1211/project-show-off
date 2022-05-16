@@ -7,6 +7,8 @@ TagManager:
   - MangerTag
   - Plant
   - Ground
+  - Line
+  - Power
   layers:
   - Default
   - TransparentFX

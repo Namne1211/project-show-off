@@ -17,15 +17,18 @@ public class GridMovement : MonoBehaviour
     LineRenderer lr;
     Vector3 targetPosition;
     Vector3 startPosition;
-    bool spawning;
+    Vector3 OriginPos;
     bool moving;
     [SerializeField]
     List<GameObject> partList= new List<GameObject>();
     // Update is called once per frame
-
-    private void Start()
+    Vector3 mOffset;
+    private void Awake()
     {
-       // lr.SetPosition(0, transform.position);
+        startPosition =transform.position;
+        OriginPos = transform.position;
+        lr.SetPosition(0, transform.position);
+        lr.SetPosition(1, transform.position);
     }
     void Update()
     {
@@ -36,74 +39,89 @@ public class GridMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.W))
             {
                 targetPosition = transform.position + Vector3.forward * movingtiles;
-                startPosition = transform.position;
+
                 moving = true;
-                spawning = true;
             }
             else if (Input.GetKeyDown(KeyCode.S))
             {
                 targetPosition = transform.position + Vector3.back * movingtiles;
-                startPosition = transform.position;
+
                 moving = true;
-                spawning = true;
+
             }
             else if (Input.GetKeyDown(KeyCode.A))
             {
                 targetPosition = transform.position + Vector3.left * movingtiles;
-                startPosition = transform.position;
+
                 moving = true;
-                spawning = true;
+
             }
             else if (Input.GetKeyDown(KeyCode.D))
             {
                 targetPosition = transform.position + Vector3.right * movingtiles;
-                startPosition = transform.position;
+
                 moving = true;
-                spawning = true;
+
             }
+
         }
-        
+
         //moving 
+
         if (moving)
         {
 
             if (Vector3.Distance(startPosition, transform.position) > snapDistance)
             {
                 transform.position = targetPosition;
-                lr.SetPosition(lr.positionCount - 1, targetPosition);
+
+                //rendering line and update at tartget
+                SetupLine();
+                startPosition = targetPosition;
                 moving = false;
+
                 return;
             }
-            if (spawning)
-            {
-                /*part.transform.position = startPosition;*/
-                
-                partList.Add(Instantiate(part, startPosition, new Quaternion(0, 0, 0, 1)));
-                SetupLine();
-               
-                
-                spawning = false;
-            }
+
             lr.SetPosition(lr.positionCount - 1, transform.position);
             transform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime;
-            
+
             return;
         }
-        
 
 
     }
 
     void SetupLine()
     {
-        if (partList.Count > 0)
+        lr.positionCount += 1;
+        lr.SetPosition(lr.positionCount - 1, targetPosition);
+        if (lr.positionCount > 1)
+            lr.SetPosition(lr.positionCount - 2, targetPosition);
+
+        partList.Add(Instantiate(part, startPosition, new Quaternion(0, 0, 0, 1)));
+        lr.SetPosition(lr.positionCount - 3, startPosition);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Line")
         {
-
-            lr.positionCount += 1;
-
-            if(lr.positionCount > 1)
-            lr.SetPosition(lr.positionCount-2, partList[partList.Count-1].transform.position);
+            foreach (GameObject part in partList)
+            {
+                Destroy(part);
+            }
+            partList.Clear();
+            transform.position = OriginPos;
+            lr.positionCount = 2;
+            startPosition = OriginPos;
+            lr.SetPosition(0, OriginPos);
+            lr.SetPosition(1, OriginPos);
+            moving = false;
             
+        }else if(other.tag == "Power")
+        {
+            Debug.Log("1");
         }
     }
 }
