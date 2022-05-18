@@ -19,6 +19,8 @@ public class RotWheel : MonoBehaviour
     }
     private void Update()
     {
+        if(progress>=0)
+        progress -= 0.005f;
         //updating bar
         progressbar.value = progress;
         fill.color = grad.Evaluate(progressbar.normalizedValue);
@@ -37,7 +39,7 @@ public class RotWheel : MonoBehaviour
                 if(rotateZ < transform.eulerAngles.z)
                 {
                     if(rotateZ > -10) {
-                        progress += 0.01f;
+                        progress += 0.035f;
                         transform.LeanRotate(new Vector3(0, 0, rotateZ), 0.1f);
                     }
                     
@@ -53,7 +55,7 @@ public class RotWheel : MonoBehaviour
                     {
                         if (rotateZ > 170)
                         {
-                            progress += 0.01f;
+                            progress += 0.035f;
                             transform.LeanRotate(new Vector3(0, 0, rotateZ), 0.1f);
                         }
                         
