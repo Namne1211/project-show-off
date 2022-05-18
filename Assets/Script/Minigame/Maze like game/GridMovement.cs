@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridMovement : MonoBehaviour
 {
+    //set up grid moving
     [SerializeField]
     float moveSpeed = 0.25f;
     [SerializeField]
@@ -11,6 +12,7 @@ public class GridMovement : MonoBehaviour
     [SerializeField]
     float movingtiles = 4f;
 
+    //setup line renderer
     [SerializeField]
     GameObject part;
     [SerializeField]
@@ -20,57 +22,39 @@ public class GridMovement : MonoBehaviour
     Vector3 OriginPos;
     bool moving;
     [SerializeField]
-    List<GameObject> partList= new List<GameObject>();
-    // Update is called once per frame
-    Vector3 mOffset;
+    List<GameObject> partList = new List<GameObject>();
+
+    //setup swipe input
+    Vector3 StartTouchPos;
+    Vector3 CurrentTouchPos;
+    Vector3 EndTouchPos;
+    float swipeRange=10;
+    float tapRange=5;
+    bool stopTouch;
+
+    //setup winning state
+    bool Winning;
+    int powerCount;
+
     private void Awake()
     {
-        startPosition =transform.position;
+        //setup starting line
+        startPosition = transform.position;
         OriginPos = transform.position;
         lr.SetPosition(0, transform.position);
         lr.SetPosition(1, transform.position);
     }
     void Update()
     {
+        //recieve swipe input
+        if (!moving)
+            swipe();
+        
 
-        //recieve input
-        if (moving == false)
-        {
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                targetPosition = transform.position + Vector3.forward * movingtiles;
 
-                moving = true;
-            }
-            else if (Input.GetKeyDown(KeyCode.S))
-            {
-                targetPosition = transform.position + Vector3.back * movingtiles;
-
-                moving = true;
-
-            }
-            else if (Input.GetKeyDown(KeyCode.A))
-            {
-                targetPosition = transform.position + Vector3.left * movingtiles;
-
-                moving = true;
-
-            }
-            else if (Input.GetKeyDown(KeyCode.D))
-            {
-                targetPosition = transform.position + Vector3.right * movingtiles;
-
-                moving = true;
-
-            }
-
-        }
-
-        //moving 
-
+        //moving with input
         if (moving)
         {
-
             if (Vector3.Distance(startPosition, transform.position) > snapDistance)
             {
                 transform.position = targetPosition;
@@ -79,7 +63,7 @@ public class GridMovement : MonoBehaviour
                 SetupLine();
                 startPosition = targetPosition;
                 moving = false;
-
+                Debug.Log(moving);
                 return;
             }
 
@@ -103,25 +87,118 @@ public class GridMovement : MonoBehaviour
         lr.SetPosition(lr.positionCount - 3, startPosition);
     }
 
+    //reset line
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Line")
+        if (other.tag == "Line")//line
         {
-            foreach (GameObject part in partList)
+            resetGameState();
+
+        }
+        else if (other.tag == "Power")//powerpoint
+        {
+            PowerStation power = other.gameObject.GetComponent<PowerStation>();
+            if (!power.IsTouch)
             {
-                Destroy(part);
+                power.IsTouch = true;
+                powerCount += 1;
+                Debug.Log(powerCount);
             }
-            partList.Clear();
-            transform.position = OriginPos;
-            lr.positionCount = 2;
-            startPosition = OriginPos;
-            lr.SetPosition(0, OriginPos);
-            lr.SetPosition(1, OriginPos);
-            moving = false;
             
-        }else if(other.tag == "Power")
+            
+        }else if(other.tag == "finalPoint")//endstate
         {
-            Debug.Log("1");
+            if (powerCount >= 2)
+            {
+                Debug.Log("win");
+            }
+            else
+            {
+                resetGameState();
+            }
+        }
+    }
+
+    private void resetGameState()
+    {
+        //reset line
+        foreach (GameObject part in partList)
+        {
+            Destroy(part);
+        }
+        partList.Clear();
+        transform.position = OriginPos;
+        lr.positionCount = 2;
+        startPosition = OriginPos;
+        lr.SetPosition(0, OriginPos);
+        lr.SetPosition(1, OriginPos);
+        //stop movement
+        moving = false;
+        //reset game condition
+        powerCount = 0;
+        GameObject[] powerList = GameObject.FindGameObjectsWithTag("Power");
+        foreach(GameObject power in powerList)
+        {
+            power.GetComponent<PowerStation>().IsTouch = false;
+        }
+    }
+
+    //swipe input
+    void swipe()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+            StartTouchPos=Input.mousePosition;
+        }
+
+        if(Input.GetMouseButton(0))
+        {
+            CurrentTouchPos = Input.mousePosition;
+            Vector3 Distance =CurrentTouchPos - StartTouchPos;
+            if (!stopTouch)
+            {
+                if (Distance.x < -swipeRange)
+                {
+                    targetPosition = transform.position + Vector3.left * movingtiles;
+
+                    moving = true;
+                    stopTouch = true;
+                }
+                else if(Distance.x > swipeRange)
+                {
+                    targetPosition = transform.position + Vector3.right * movingtiles;
+
+                    moving = true;
+                    stopTouch = true;
+                }else if (Distance.y < -swipeRange)
+                {
+                    targetPosition = transform.position + Vector3.back * movingtiles;
+
+                    moving = true;
+                    stopTouch = true;
+                }
+                else if (Distance.y > swipeRange)
+                {
+                    targetPosition = transform.position + Vector3.forward * movingtiles;
+
+                    moving = true;
+                    stopTouch = true;
+                }
+              
+            }
+        }
+
+        if(Input.GetMouseButtonUp(0))
+        {
+            stopTouch = false;
+            EndTouchPos = Input.mousePosition;
+
+            Vector3 Distance =EndTouchPos - StartTouchPos;
+            
+            if (Mathf.Abs(Distance.x)<tapRange && Mathf.Abs(Distance.y) < tapRange)
+            {
+                Debug.Log("tap");
+            }
         }
     }
 }

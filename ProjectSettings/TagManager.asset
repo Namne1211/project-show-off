@@ -8,6 +8,8 @@ TagManager:
   - Plant
   - Ground
   - Line
+  - finalPoint
+  - Undefined
   - Power
   layers:
   - Default
