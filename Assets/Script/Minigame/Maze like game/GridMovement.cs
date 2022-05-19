@@ -23,6 +23,9 @@ public class GridMovement : MonoBehaviour
     bool moving;
     [SerializeField]
     List<GameObject> partList = new List<GameObject>();
+    public GameObject holder;
+
+
 
     //setup swipe input
     Vector3 StartTouchPos;
@@ -34,41 +37,50 @@ public class GridMovement : MonoBehaviour
 
     //setup winning state
     bool Winning;
-    int powerCount;
+    public int powerCount;
 
-    private void Awake()
+    private void OnEnable()
     {
         //setup starting line
-        startPosition = transform.position;
-        OriginPos = transform.position;
-        lr.SetPosition(0, transform.position);
-        lr.SetPosition(1, transform.position);
+        lr.useWorldSpace = false;
+        startPosition = transform.localPosition;
+        OriginPos = transform.localPosition;
+        lr.SetPosition(0, OriginPos);
+        lr.SetPosition(1, OriginPos);
     }
     void Update()
     {
         //recieve swipe input
         if (!moving)
             swipe();
-        
+
 
 
         //moving with input
         if (moving)
         {
-            if (Vector3.Distance(startPosition, transform.position) > snapDistance)
+
+            if (targetPosition.x <= -movingtiles * 2.5 || targetPosition.x >= movingtiles * 2.5 ||
+                targetPosition.z <= -movingtiles * 2.5 || targetPosition.z >= movingtiles * 2.5)
             {
-                transform.position = targetPosition;
+                moving = false;
+                return;
+            }
+
+            if (Vector3.Distance(startPosition, transform.localPosition) > snapDistance)
+            {
+                transform.localPosition = targetPosition;
 
                 //rendering line and update at tartget
                 SetupLine();
                 startPosition = targetPosition;
                 moving = false;
-                Debug.Log(moving);
+                //Debug.Log(moving);
                 return;
             }
 
-            lr.SetPosition(lr.positionCount - 1, transform.position);
-            transform.position += (targetPosition - startPosition) * moveSpeed * Time.deltaTime;
+            lr.SetPosition(lr.positionCount - 1, transform.localPosition);
+            transform.localPosition += (targetPosition - startPosition) * moveSpeed * Time.deltaTime;
 
             return;
         }
@@ -83,7 +95,7 @@ public class GridMovement : MonoBehaviour
         if (lr.positionCount > 1)
             lr.SetPosition(lr.positionCount - 2, targetPosition);
 
-        partList.Add(Instantiate(part, startPosition, new Quaternion(0, 0, 0, 1)));
+        partList.Add(Instantiate(part, holder.transform.position + startPosition, new Quaternion(0, 0, 0, 1),holder.transform));
         lr.SetPosition(lr.positionCount - 3, startPosition);
     }
 
@@ -127,7 +139,7 @@ public class GridMovement : MonoBehaviour
             Destroy(part);
         }
         partList.Clear();
-        transform.position = OriginPos;
+        transform.localPosition = OriginPos;
         lr.positionCount = 2;
         startPosition = OriginPos;
         lr.SetPosition(0, OriginPos);
@@ -159,27 +171,27 @@ public class GridMovement : MonoBehaviour
             {
                 if (Distance.x < -swipeRange)
                 {
-                    targetPosition = transform.position + Vector3.left * movingtiles;
+                    targetPosition = transform.localPosition + Vector3.left * movingtiles;
 
                     moving = true;
                     stopTouch = true;
                 }
                 else if(Distance.x > swipeRange)
                 {
-                    targetPosition = transform.position + Vector3.right * movingtiles;
+                    targetPosition = transform.localPosition + Vector3.right * movingtiles;
 
                     moving = true;
                     stopTouch = true;
                 }else if (Distance.y < -swipeRange)
                 {
-                    targetPosition = transform.position + Vector3.back * movingtiles;
+                    targetPosition = transform.localPosition + Vector3.back * movingtiles;
 
                     moving = true;
                     stopTouch = true;
                 }
                 else if (Distance.y > swipeRange)
                 {
-                    targetPosition = transform.position + Vector3.forward * movingtiles;
+                    targetPosition = transform.localPosition + Vector3.forward * movingtiles;
 
                     moving = true;
                     stopTouch = true;
@@ -200,5 +212,10 @@ public class GridMovement : MonoBehaviour
                 Debug.Log("tap");
             }
         }
+    }
+
+    private void OnDisable()
+    {
+        resetGameState();
     }
 }

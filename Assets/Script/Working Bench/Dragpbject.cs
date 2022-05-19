@@ -16,7 +16,7 @@ public class Dragpbject : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x < -14 || transform.position.x > 14 || transform.position.z < -5|| transform.position.z > 9)
+        if (transform.position.x < -20 || transform.position.x > 20 || transform.position.z < -7|| transform.position.z > 11)
         {
             Destroy(gameObject);
         }
@@ -48,9 +48,5 @@ public class Dragpbject : MonoBehaviour
         transform.position = movingRange;
     }
 
-    private void OnMouseUp()
-    {
-        //transform.position = startPos;
-    }
 
 }

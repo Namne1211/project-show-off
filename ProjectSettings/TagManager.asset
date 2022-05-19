@@ -11,6 +11,7 @@ TagManager:
   - finalPoint
   - Undefined
   - Power
+  - Grid
   layers:
   - Default
   - TransparentFX

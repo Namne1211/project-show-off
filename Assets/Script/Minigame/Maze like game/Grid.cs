@@ -7,11 +7,11 @@ public class Grid : MonoBehaviour
     [SerializeField]
     private float size = 1f;
     [SerializeField]
-    List<obstacle> vector3s = new List<obstacle>();
+    List<obstacle> ObjectData = new List<obstacle>();
     public GameObject obstacle;
     public GameObject powerPoint;
-
-    private void Start()
+    public GameObject holder;
+    private void OnEnable()
     {
         AddGridPos();
         InstantObstacle();
@@ -23,32 +23,32 @@ public class Grid : MonoBehaviour
         for (float x = 0; x < size * 4; x += size)
             for (float z = 0; z < size * 4; z += size)
             {
-                Vector3 point = GetNearestPointonGrid(new Vector3(x + transform.position.x, 0f, z + transform.position.z));
-                vector3s.Add(new obstacle(point, false));
+                Vector3 point = GetNearestPointonGrid(new Vector3(x + transform.position.x, transform.position.y, z + transform.position.z));
+                ObjectData.Add(new obstacle(point, false));
             }
     }
 
     void InstantObstacle()
     {
         //random choice for power station
-        int firstPower=Random.Range(0, vector3s.Count-1);
-        int SecondPower = Random.Range(0, vector3s.Count - 1);
+        int firstPower=Random.Range(0, ObjectData.Count-1);
+        int SecondPower = Random.Range(0, ObjectData.Count - 1);
 
         while(firstPower == SecondPower)
         {
-            SecondPower = Random.Range(0, vector3s.Count - 1);
+            SecondPower = Random.Range(0, ObjectData.Count - 1);
         }
 
-        Instantiate(powerPoint,vector3s[firstPower].position,new Quaternion(0,0,0,0));
-        vector3s[firstPower].Open = true;
-        Instantiate(powerPoint, vector3s[SecondPower].position, new Quaternion(0, 0, 0, 0));
-        vector3s[SecondPower].Open = true;
+        Instantiate(powerPoint,ObjectData[firstPower].position,new Quaternion(0,0,0,0),holder.transform);
+        ObjectData[firstPower].Open = true;
+        Instantiate(powerPoint, ObjectData[SecondPower].position, new Quaternion(0, 0, 0, 0), holder.transform);
+        ObjectData[SecondPower].Open = true;
         
         //spawn other object
-        foreach(obstacle op in vector3s)
+        foreach(obstacle op in ObjectData)
         {
             if (op.Open) continue;
-            Instantiate(obstacle,op.position,new Quaternion(0,0,0, 0));
+            Instantiate(obstacle,op.position,new Quaternion(0,0,0, 0), holder.transform);
         }
     }
 
@@ -83,6 +83,22 @@ public class Grid : MonoBehaviour
 
     }
 
+
+    private void OnDisable()
+    {
+        GameObject[] powerList = GameObject.FindGameObjectsWithTag("Power");
+        GameObject[] normalList = GameObject.FindGameObjectsWithTag("Grid");
+
+        foreach (GameObject power in powerList)
+        {
+            Destroy(power);
+        }
+        foreach (GameObject normal in normalList)
+        {
+            Destroy(normal);
+        }
+        ObjectData.Clear();
+    }
 }
 
 //class to hold position and state of the obstacle

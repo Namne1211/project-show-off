@@ -17,10 +17,7 @@ public class CheckPoint : MonoBehaviour
                 Debug.Log("check");
                 RenewPos();
             }
-            else
-            {
-                //Debug.Log("fault");
-            }
+
         }
 
 
@@ -34,29 +31,11 @@ public class CheckPoint : MonoBehaviour
                 Debug.Log("check");
                 RenewPos();
             }
-            else
-            {
-                //  Debug.Log("fault");
-            }
+
         }
 
     }
 
-
-    /*  private void Update()
-      {
-          if (Input.GetMouseButtonDown(0))
-          {
-              if(line.transform.position.x > (transform.position.x + transform.lossyScale.x + line.transform.lossyScale.x)&&
-                  line.transform.position.x < (transform.position.x + transform.lossyScale.x + line.transform.lossyScale.x))
-              {
-                  Debug.Log("check");
-                  RenewPos();
-              }
-          }
-          Debug.Log(-(transform.position.x + transform.lossyScale.x + line.transform.lossyScale.x));
-
-      }*/
     void RenewPos()
     {
         point += 1;

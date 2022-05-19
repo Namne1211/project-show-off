@@ -17,6 +17,7 @@ public class RotWheel : MonoBehaviour
         progressbar.maxValue=winRate;
         fill.color = grad.Evaluate(0f);
     }
+
     private void Update()
     {
         if(progress>=0)
@@ -64,7 +65,7 @@ public class RotWheel : MonoBehaviour
                 if (rotateZ < 0 && rotateZ >= -180)
                     if (rotateZ < -degreeAngle)
                     {
-                        progress += 0.01f;
+                        progress += 0.035f;
                         transform.LeanRotate(new Vector3(0, 0, rotateZ), 0.1f);
                     }
             }

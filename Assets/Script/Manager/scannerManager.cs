@@ -18,11 +18,17 @@ public class scannerManager : MonoBehaviour
     public void SpawnOnScan()
     {
         int augment = GameObject.FindGameObjectsWithTag("Plant").Length;
-
-        if(augment < 4)
+        Debug.Log(augment);
+        if (augment < 4)
         {
+            
             Vector3 rndPos = new Vector3(Random.Range(-1, 1), aumentHolder.transform.position.y , Random.Range(-2, 2));
-            Instantiate(a, rndPos,aumentHolder.transform.rotation,aumentHolder.transform);
+            GameObject asd =Instantiate(a, rndPos,aumentHolder.transform.rotation,aumentHolder.transform);
+            int child =asd.transform.childCount;
+            for(int i = 0; i < child; i++)
+            {
+                asd.transform.GetChild(0).parent = aumentHolder.transform;
+            }
         }
 
     }
