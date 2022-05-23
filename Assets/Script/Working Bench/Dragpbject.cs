@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Dragpbject : MonoBehaviour
 {
+
+    public GameObject targetCursor;
     private Vector3 mOffset;
 
     private float mZcord;
@@ -11,6 +13,7 @@ public class Dragpbject : MonoBehaviour
     private Vector3 startPos;
     private void Start()
     {
+        targetCursor = GameObject.Find("mouse");
         startPos = transform.position;
     }
 
@@ -21,7 +24,7 @@ public class Dragpbject : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void OnMouseDown()
+    public void MovingStart()
     {
         mZcord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
 
@@ -30,17 +33,18 @@ public class Dragpbject : MonoBehaviour
     }
     private Vector3 GetMouseWorldPos()
     {
-        Vector3 mousePoint = Input.mousePosition;
+        Vector3 mousePoint = targetCursor.transform.position;
 
         mousePoint.z = mZcord;
 
         return Camera.main.ScreenToWorldPoint(mousePoint);
     }
 
-    private void OnMouseDrag()
+    public void IsMoving()
     {
         //decide moving range
         Vector3 movingRange = GetMouseWorldPos() + mOffset + new Vector3(0, 3, 0);
+        //Debug.Log(GetMouseWorldPos());
         //moving restriction
         movingRange.y = startPos.y;
         //movingRange.x = Mathf.Clamp(movingRange.x, -13, 13);
