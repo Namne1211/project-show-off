@@ -8,6 +8,7 @@ public class Grid : MonoBehaviour
     private float size = 1f;
     [SerializeField]
     List<obstacle> ObjectData = new List<obstacle>();
+    List<int> ObjectIndex = new List<int>();
     public GameObject obstacle;
     public GameObject powerPoint;
     public GameObject holder;
@@ -26,18 +27,19 @@ public class Grid : MonoBehaviour
                 Vector3 point = GetNearestPointonGrid(new Vector3(x + transform.position.x, transform.position.y, z + transform.position.z));
                 ObjectData.Add(new obstacle(point, false));
             }
+
+        for(int i = 0; i < ObjectData.Count; i++)
+        {
+            ObjectIndex.Add(i);
+        }
     }
 
     void InstantObstacle()
     {
         //random choice for power station
-        int firstPower=Random.Range(0, ObjectData.Count-1);
-        int SecondPower = Random.Range(0, ObjectData.Count - 1);
-
-        while(firstPower == SecondPower)
-        {
-            SecondPower = Random.Range(0, ObjectData.Count - 1);
-        }
+        int firstPower = Random.Range(0, ObjectIndex.Count-1);
+        ObjectIndex.Remove(firstPower);
+        int SecondPower = Random.Range(0, ObjectIndex.Count - 1);
 
         Instantiate(powerPoint,ObjectData[firstPower].position,new Quaternion(0,0,0,0),holder.transform);
         ObjectData[firstPower].Open = true;
@@ -97,6 +99,7 @@ public class Grid : MonoBehaviour
         {
             Destroy(normal);
         }
+        ObjectIndex.Clear();
         ObjectData.Clear();
     }
 }

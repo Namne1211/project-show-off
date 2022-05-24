@@ -31,7 +31,7 @@ public class TouchPad : MonoBehaviour
 		ResetMousePosition();
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
 
 		//controll mouse

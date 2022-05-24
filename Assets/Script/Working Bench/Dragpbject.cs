@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void OnDestroyHandler(GameObject objectToDestroy);
 public class Dragpbject : MonoBehaviour
 {
 
@@ -11,6 +12,14 @@ public class Dragpbject : MonoBehaviour
     private float mZcord;
 
     private Vector3 startPos;
+
+    public OnDestroyHandler onDestroy;
+
+    //bounderies
+    public int horizontalBounderies=25;
+
+    public int verticalBounderies=10;
+    
     private void Start()
     {
         targetCursor = GameObject.Find("mouse");
@@ -19,8 +28,9 @@ public class Dragpbject : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x < -20 || transform.position.x > 20 || transform.position.z < -7|| transform.position.z > 11)
+        if (transform.position.x < -horizontalBounderies || transform.position.x > horizontalBounderies || transform.position.z < -verticalBounderies || transform.position.z > verticalBounderies)
         {
+            onDestroy?.Invoke(gameObject);
             Destroy(gameObject);
         }
     }

@@ -9,6 +9,7 @@ public class scannerManager : MonoBehaviour
     public GameObject a;
     public List<GameObject> ObjToSpawn;
 
+
     private void Start()
     {
         aumentHolder = GameObject.Find("AumentHolder");
@@ -18,6 +19,7 @@ public class scannerManager : MonoBehaviour
     public void SpawnOnScan()
     {
         int augment = GameObject.FindGameObjectsWithTag("Plant").Length;
+     
         Debug.Log(augment);
         if (augment < 4)
         {
@@ -25,11 +27,23 @@ public class scannerManager : MonoBehaviour
             Vector3 rndPos = new Vector3(Random.Range(-1, 1), aumentHolder.transform.position.y , Random.Range(-2, 2));
             GameObject asd =Instantiate(a, rndPos,aumentHolder.transform.rotation,aumentHolder.transform);
             int child =asd.transform.childCount;
+            ObjToSpawn.Add(asd);
             for(int i = 0; i < child; i++)
             {
+                ObjToSpawn.Add(asd.transform.GetChild(0).gameObject);             
+                asd.transform.GetChild(0).gameObject.GetComponent<Dragpbject>().onDestroy += removemember;
                 asd.transform.GetChild(0).parent = aumentHolder.transform;
+            }
+            if (asd.GetComponent<Dragpbject>() != null)
+            {
+                asd.GetComponent<Dragpbject>().onDestroy += removemember;
             }
         }
 
+    }
+
+    public void removemember(GameObject objectToRemove)
+    {
+       ObjToSpawn.Remove(objectToRemove);
     }
 }
