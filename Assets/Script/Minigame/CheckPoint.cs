@@ -8,14 +8,25 @@ public class CheckPoint : MonoBehaviour
     public GameObject line;
     Vector3 prevPos;
     public int point;
+    private void Update()
+    {
+
+      
+        transform.LookAt(new Vector3(0, 0, -1f), Vector3.left);
+
+    }
     private void OnTriggerStay(Collider other)
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (other.gameObject.name == "line")
+            if (other.gameObject.name == "lan")
             {
                 Debug.Log("check");
                 RenewPos();
+                IndicateLine.speed += 40f;
+                IndicateLine.direction = -IndicateLine.direction;
+
+
             }
 
         }
@@ -26,7 +37,7 @@ public class CheckPoint : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (other.gameObject.name == "line")
+            if (other.gameObject.name == "lan")
             {
                 Debug.Log("check");
                 RenewPos();
@@ -38,15 +49,21 @@ public class CheckPoint : MonoBehaviour
 
     void RenewPos()
     {
+        
         point += 1;
-        float holderLength = (holder.transform.lossyScale.x - transform.lossyScale.x) / 2;
+        //float holderLength = (holder.transform.lossyScale.x - transform.lossyScale.x) / 2;
 
-        float ranX = Random.Range(-holderLength, holderLength);
-        while(ranX > prevPos.x-2f && ranX <prevPos.x+2f)
-            ranX = Random.Range(-holderLength, holderLength);
+        // float ranX = Random.Range(-holderLength, holderLength);
+        //  while(ranX > prevPos.x-2f && ranX <prevPos.x+2f)
+        //    ranX = Random.Range(-holderLength, holderLength);
 
-        prevPos = new Vector3(ranX, transform.position.y, transform.position.z);
-        transform.position = new Vector3(ranX, transform.position.y, transform.position.z);
+        // prevPos = new Vector3(ranX, transform.position.y, transform.position.z);
+        //transform.position = new Vector3(ranX, transform.position.y, transform.position.z);
+        float radius = 2f;
+        float angle =Random.Range(0, 360);
+        Vector3 randomCircle = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad)*radius, Mathf.Sin(angle * Mathf.Deg2Rad)*radius, -1f);
+        //Vector3 worldPos = transform.TransformPoint(randomCircle * radius);
+        transform.position = randomCircle;
     }
 
     void win()
