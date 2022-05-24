@@ -11,7 +11,7 @@ public class TasksManager : MonoBehaviour
     List<string> tempature = new List<string>() { "hot", "cold", "tepyd" };
 
     public TextMeshProUGUI taskToShow;
-    public tropical trop;
+    public Environment trop;
     public tempature temp;
     public humid humid;
 
@@ -25,7 +25,7 @@ public class TasksManager : MonoBehaviour
     void NewTask()
     {
 
-        trop = EnumExtend.RandomEnumValue<tropical>();
+        trop = EnumExtend.RandomEnumValue<Environment>();
         temp = EnumExtend.RandomEnumValue<tempature>();
         humid = EnumExtend.RandomEnumValue<humid>();
 

@@ -15,6 +15,7 @@ public class machine : MonoBehaviour
     public TasksManager tasksManager;
     public MachineTypes machineType;
 
+    GameObject currentAugment;
     private void Update()
     {
         checkCondition();
@@ -22,9 +23,10 @@ public class machine : MonoBehaviour
 
     void checkCondition()
     {
+        if(currentAugment != null)
         switch(machineType){
             case MachineTypes.environment:
-                if (tasksManager.trop == tropical.artic)
+                if (tasksManager.trop == Environment.artic)
                 {
                     Debug.Log("1");
                 }
@@ -58,4 +60,11 @@ public class machine : MonoBehaviour
     }
 
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Plant")
+        {
+            currentAugment = other.gameObject;
+        }
+    }
 }

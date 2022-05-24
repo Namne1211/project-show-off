@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum tropical
+public enum Environment
 {
     artic,
     desert,
@@ -23,8 +23,8 @@ public enum tempature
 }
 
 
-public abstract class Augment : MonoBehaviour
+public class Augment : MonoBehaviour
 {
 
-    public tropical tropical;
+    public Environment environment;
 }
