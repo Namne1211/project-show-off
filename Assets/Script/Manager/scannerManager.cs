@@ -18,7 +18,7 @@ public class scannerManager : MonoBehaviour
 
     public void SpawnOnScan()
     {
-        int augment = GameObject.FindGameObjectsWithTag("Plant").Length;
+        int augment = ObjToSpawn.Count;
      
         Debug.Log(augment);
         if (augment < 4)

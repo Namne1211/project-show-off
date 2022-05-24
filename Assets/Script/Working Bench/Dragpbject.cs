@@ -28,7 +28,13 @@ public class Dragpbject : MonoBehaviour
 
     private void Update()
     {
-        if (transform.position.x < -horizontalBounderies || transform.position.x > horizontalBounderies || transform.position.z < -verticalBounderies || transform.position.z > verticalBounderies)
+        RemoveObj();
+    }
+
+    void RemoveObj()
+    {
+        if (transform.position.x < -horizontalBounderies || transform.position.x > horizontalBounderies || 
+            transform.position.z < -verticalBounderies || transform.position.z > verticalBounderies)
         {
             onDestroy?.Invoke(gameObject);
             Destroy(gameObject);

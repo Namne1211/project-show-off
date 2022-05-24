@@ -87,6 +87,7 @@ public class TouchPad : MonoBehaviour
     {
         if (draging)
         {
+			if(dragingObj.GetComponent<Dragpbject>()!= null)
 			dragingObj.GetComponent<Dragpbject>().IsMoving();
 		}
 		
