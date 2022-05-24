@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using TMPro;
 
 public class TasksManager : MonoBehaviour
@@ -10,7 +11,9 @@ public class TasksManager : MonoBehaviour
     List<string> tempature = new List<string>() { "hot", "cold", "tepyd" };
 
     public TextMeshProUGUI taskToShow;
-
+    public tropical trop;
+    public tempature temp;
+    public humid humid;
 
     private void Update()
     {
@@ -21,13 +24,24 @@ public class TasksManager : MonoBehaviour
     }
     void NewTask()
     {
-       
-        int rndTypes = Random.Range(0,2);
-        int rndHumid = Random.Range(0, 2);
-        int rndtemp = Random.Range(0, 2);
 
-        string taskName = "I need a product for the " + types[rndTypes] + " environment. It needs to be " + humidity[rndHumid] + " humid level and " + tempature[rndtemp] + " tempature level.";
+        trop = EnumExtend.RandomEnumValue<tropical>();
+        temp = EnumExtend.RandomEnumValue<tempature>();
+        humid = EnumExtend.RandomEnumValue<humid>();
+
+        string taskName = "I need a product for the " + trop + " environment. It needs to be " + humid + " humid level and " + temp + " tempature level.";
 
         taskToShow.text = taskName;
+    }
+
+
+}
+public static class EnumExtend
+{
+    public static T RandomEnumValue<T>()
+    {
+        var values = Enum.GetValues(typeof(T));
+        int random = UnityEngine.Random.Range(0, values.Length);
+        return (T)values.GetValue(random);
     }
 }

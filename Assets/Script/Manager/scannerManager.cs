@@ -8,7 +8,7 @@ public class scannerManager : MonoBehaviour
     bool spawned;
     public GameObject a;
     public List<GameObject> ObjToSpawn;
-
+    public int objectLimit=12;
 
     private void Start()
     {
@@ -21,7 +21,7 @@ public class scannerManager : MonoBehaviour
         int augment = ObjToSpawn.Count;
      
         Debug.Log(augment);
-        if (augment < 4)
+        if (augment < objectLimit)
         {
             
             Vector3 rndPos = new Vector3(Random.Range(-1, 1), aumentHolder.transform.position.y , Random.Range(-2, 2));

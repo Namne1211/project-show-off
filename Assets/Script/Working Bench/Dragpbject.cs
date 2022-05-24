@@ -59,10 +59,10 @@ public class Dragpbject : MonoBehaviour
     public void IsMoving()
     {
         //decide moving range
-        Vector3 movingRange = GetMouseWorldPos() + mOffset + new Vector3(0, 3, 0);
+        Vector3 movingRange = GetMouseWorldPos() + mOffset+ new Vector3(0,1,0);
         //Debug.Log(GetMouseWorldPos());
         //moving restriction
-        movingRange.y = startPos.y;
+        //movingRange.y = startPos.y;
         //movingRange.x = Mathf.Clamp(movingRange.x, -13, 13);
         //movingRange.z = Mathf.Clamp(movingRange.z, -4, 8);
         transform.position = movingRange;

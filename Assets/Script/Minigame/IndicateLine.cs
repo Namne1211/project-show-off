@@ -6,8 +6,8 @@ public class IndicateLine : MonoBehaviour
 {
     public GameObject holder;
     Vector3 movingDir;
-    public static float speed = 50f;
-    public static Vector3 direction = Vector3.forward;
+    public float speed = 50f;
+    public Vector3 direction = Vector3.forward;
 
     private void Start()
     {

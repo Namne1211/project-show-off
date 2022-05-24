@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 796097530939845384}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.06, y: 45.88, z: -4.84}
-  m_LocalScale: {x: 4, y: 4, z: 4}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 1620015655492745511}
   - {fileID: 671612008266104750}
@@ -130,6 +130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCursor: {fileID: 3160484564759645333, guid: 3563f8b40b6bfbf4ea9e14fa159e9375, type: 3}
+  horizontalBounderies: 25
+  verticalBounderies: 10
 --- !u!65 &-2912328433782583854
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -270,6 +272,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCursor: {fileID: 3160484564759645333, guid: 3563f8b40b6bfbf4ea9e14fa159e9375, type: 3}
+  horizontalBounderies: 25
+  verticalBounderies: 10
 --- !u!65 &768730407782639856
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -410,6 +414,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCursor: {fileID: 3160484564759645333, guid: 3563f8b40b6bfbf4ea9e14fa159e9375, type: 3}
+  horizontalBounderies: 25
+  verticalBounderies: 10
 --- !u!65 &4910903211425821254
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -550,6 +556,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCursor: {fileID: 3160484564759645333, guid: 3563f8b40b6bfbf4ea9e14fa159e9375, type: 3}
+  horizontalBounderies: 25
+  verticalBounderies: 10
 --- !u!65 &1124360743622344044
 BoxCollider:
   m_ObjectHideFlags: 0
