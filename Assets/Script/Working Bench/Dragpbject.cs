@@ -5,7 +5,7 @@ using UnityEngine;
 public delegate void OnDestroyHandler(GameObject objectToDestroy);
 public class Dragpbject : MonoBehaviour
 {
-
+    public MinigameManager minigameManager;
     public GameObject targetCursor;
     private Vector3 mOffset;
 
@@ -16,29 +16,33 @@ public class Dragpbject : MonoBehaviour
     public OnDestroyHandler onDestroy;
 
     //bounderies
-    public int horizontalBounderies=25;
+    public int horizontalBounderies=7;
 
-    public int verticalBounderies=10;
+    public int verticalBounderies=5;
     
     private void Start()
     {
+        //minigameManager = GameObject.Find("GameManager").GetComponent<MinigameManager>();
+        //minigameManager.onRunningMinigame += RemoveObj;
         targetCursor = GameObject.Find("mouse");
         startPos = transform.position;
     }
 
     private void Update()
     {
-        RemoveObj();
-    }
-
-    void RemoveObj()
-    {
-        if (transform.position.x < -horizontalBounderies || transform.position.x > horizontalBounderies || 
+        if (transform.position.x < -horizontalBounderies || transform.position.x > horizontalBounderies ||
             transform.position.z < -verticalBounderies || transform.position.z > verticalBounderies)
         {
-            onDestroy?.Invoke(gameObject);
-            Destroy(gameObject);
+            RemoveObj(1);
         }
+
+    }
+
+    void RemoveObj(int ind)
+    {
+        onDestroy?.Invoke(gameObject);
+        Destroy(gameObject);
+
     }
     public void MovingStart()
     {
@@ -60,13 +64,10 @@ public class Dragpbject : MonoBehaviour
     {
         //decide moving range
         Vector3 movingRange = GetMouseWorldPos() + mOffset+ new Vector3(0,1,0);
-        //Debug.Log(GetMouseWorldPos());
-        //moving restriction
-        //movingRange.y = startPos.y;
-        //movingRange.x = Mathf.Clamp(movingRange.x, -13, 13);
-        //movingRange.z = Mathf.Clamp(movingRange.z, -4, 8);
+
         transform.position = movingRange;
     }
+
 
 
 }

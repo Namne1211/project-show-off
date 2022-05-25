@@ -4,16 +4,21 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
+    public MinigameManager minigameManager;
     public GameObject holder;
     public GameObject line;
     Vector3 prevPos;
     public int point;
+    private void Start()
+    {
+        transform.parent = holder.transform;
+    }
     private void Update()
     {
 
-      
-        transform.LookAt(new Vector3(0, 0, -1f), Vector3.left);
-
+       
+        transform.LookAt(holder.transform, Vector3.left);
+        win();
     }
     private void OnTriggerStay(Collider other)
     {
@@ -53,24 +58,18 @@ public class CheckPoint : MonoBehaviour
         point += 1;
         //float holderLength = (holder.transform.lossyScale.x - transform.lossyScale.x) / 2;
 
-        // float ranX = Random.Range(-holderLength, holderLength);
-        //  while(ranX > prevPos.x-2f && ranX <prevPos.x+2f)
-        //    ranX = Random.Range(-holderLength, holderLength);
-
-        // prevPos = new Vector3(ranX, transform.position.y, transform.position.z);
-        //transform.position = new Vector3(ranX, transform.position.y, transform.position.z);
         float radius = 2f;
         float angle =Random.Range(0, 360);
-        Vector3 randomCircle = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad)*radius, Mathf.Sin(angle * Mathf.Deg2Rad)*radius, -1f);
+        Vector3 randomCircle = new Vector3(Mathf.Cos(angle * Mathf.Deg2Rad)*radius, Mathf.Sin(angle * Mathf.Deg2Rad)*radius, 0);
         //Vector3 worldPos = transform.TransformPoint(randomCircle * radius);
-        transform.position = randomCircle;
+        transform.localPosition = randomCircle;
     }
 
     void win()
     {
         if (point >= 5)
         {
-            Debug.Log("win");
+            minigameManager.onMinigameDone?.Invoke(2);
             point = 0;
         }
     }

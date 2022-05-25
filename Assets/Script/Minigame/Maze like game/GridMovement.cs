@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GridMovement : MonoBehaviour
 {
+    public MinigameManager minigameManager;
+
     //set up grid moving
     [SerializeField]
     float moveSpeed = 0.25f;
@@ -61,7 +63,7 @@ public class GridMovement : MonoBehaviour
         {
 
             if (targetPosition.x <= -movingtiles * 2.5 || targetPosition.x >= movingtiles * 2.5 ||
-                targetPosition.z <= -movingtiles * 2.5 || targetPosition.z >= movingtiles * 2.5)
+                targetPosition.y <= -movingtiles * 2.5 || targetPosition.y >= movingtiles * 2.5)
             {
                 moving = false;
                 return;
@@ -95,7 +97,9 @@ public class GridMovement : MonoBehaviour
         if (lr.positionCount > 1)
             lr.SetPosition(lr.positionCount - 2, targetPosition);
 
-        partList.Add(Instantiate(part, holder.transform.position + startPosition, new Quaternion(0, 0, 0, 1),holder.transform));
+        GameObject newtile = Instantiate(part, holder.transform);
+        newtile.transform.localPosition = startPosition; 
+        partList.Add(newtile);
         lr.SetPosition(lr.positionCount - 3, startPosition);
     }
 
@@ -122,7 +126,7 @@ public class GridMovement : MonoBehaviour
         {
             if (powerCount >= 2)
             {
-                Debug.Log("win");
+                minigameManager.onMinigameDone?.Invoke(0);
             }
             else
             {

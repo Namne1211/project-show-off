@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class RotWheel : MonoBehaviour
 {
+    public MinigameManager minigameManager;
     public float winRate = 20;
     public float progress;
     public Slider progressbar;
     public Gradient grad;
     public Image fill;
-
+    public Camera cam;
     
     private void Start()
     {
@@ -29,10 +30,10 @@ public class RotWheel : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             //findif mous position
-            Vector3 dif = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)) - transform.position;
+            Vector3 dif = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10)) - transform.position;
             dif.Normalize();
             float rotateZ = Mathf.Atan2(dif.y, dif.x) * Mathf.Rad2Deg;
-
+            Debug.Log(rotateZ);
             //restric the rotating angle
             float degreeAngle;
             if (transform.eulerAngles.z>=0 && transform.eulerAngles.z <= 180)
@@ -75,7 +76,7 @@ public class RotWheel : MonoBehaviour
 
         }
 
-
+        Win();
     }
 
     //if win
@@ -83,7 +84,7 @@ public class RotWheel : MonoBehaviour
     {
         if (progress >= winRate)
         {
-            Debug.Log("win");
+            minigameManager.onMinigameDone?.Invoke(2);
         }
     }
 

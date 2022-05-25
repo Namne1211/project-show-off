@@ -25,6 +25,7 @@ public enum tempature
 
 public class Augment : MonoBehaviour
 {
-
+    public humid humid;
+    public tempature temp;
     public Environment environment;
 }

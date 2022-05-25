@@ -512,6 +512,8 @@ MonoBehaviour:
   part: {fileID: 1479285867924133185, guid: 612397271aecc14428cdf91f24b7de59, type: 3}
   lr: {fileID: 2193630582718813646}
   partList: []
+  holder: {fileID: 2193630584642055674}
+  powerCount: 0
 --- !u!65 &2193630584331520181
 BoxCollider:
   m_ObjectHideFlags: 0

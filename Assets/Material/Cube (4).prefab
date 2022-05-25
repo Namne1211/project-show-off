@@ -300,6 +300,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc48460ac8922474cbe72baaa3bab131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  humid: 0
+  temp: 2
   environment: 2
 --- !u!1 &1853008022720588256
 GameObject:
@@ -456,6 +458,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc48460ac8922474cbe72baaa3bab131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  humid: 2
+  temp: 0
   environment: 1
 --- !u!1 &2116543406918401644
 GameObject:
@@ -612,4 +616,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc48460ac8922474cbe72baaa3bab131, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  humid: 1
+  temp: 1
   environment: 0

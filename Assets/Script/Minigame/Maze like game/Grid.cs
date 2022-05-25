@@ -22,9 +22,9 @@ public class Grid : MonoBehaviour
     void AddGridPos()
     {
         for (float x = 0; x < size * 4; x += size)
-            for (float z = 0; z < size * 4; z += size)
+            for (float y = 0; y < size * 4; y += size)
             {
-                Vector3 point = GetNearestPointonGrid(new Vector3(x + transform.position.x, transform.position.y, z + transform.position.z));
+                Vector3 point = GetNearestPointonGrid(new Vector3(x + transform.position.x,y + transform.position.y, transform.position.z));
                 ObjectData.Add(new obstacle(point, false));
             }
 

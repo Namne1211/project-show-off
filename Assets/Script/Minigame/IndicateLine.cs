@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class IndicateLine : MonoBehaviour
 {
-    public GameObject holder;
+    public GameObject cylinder;
     Vector3 movingDir;
     public float speed = 50f;
     public Vector3 direction = Vector3.forward;
@@ -20,7 +20,7 @@ public class IndicateLine : MonoBehaviour
         // {
         //     movingDir = -movingDir;
         //  }
-        transform.RotateAround(new Vector3(0,0, -1f), direction, speed * Time.deltaTime);
+        transform.RotateAround(cylinder.transform.position, direction, speed * Time.deltaTime);
         //transform.Translate(movingDir * Time.deltaTime);
     }
 }

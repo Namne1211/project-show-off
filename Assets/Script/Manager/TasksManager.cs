@@ -6,9 +6,6 @@ using TMPro;
 
 public class TasksManager : MonoBehaviour
 {
-    List<string> types = new List<string>() { "desert","tropical","artic"};
-    List<string> humidity = new List<string>() { "dry", "moist", "wet" };
-    List<string> tempature = new List<string>() { "hot", "cold", "tepyd" };
 
     public TextMeshProUGUI taskToShow;
     public Environment trop;

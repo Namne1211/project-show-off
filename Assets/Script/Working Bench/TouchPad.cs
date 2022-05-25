@@ -6,7 +6,6 @@ public class TouchPad : MonoBehaviour
 {
 	[Header("Target Object")]
 	public GameObject targetObject;
-
 	[Header("Movement")]
 	public bool toMove;
 	public bool movementX;
@@ -15,9 +14,6 @@ public class TouchPad : MonoBehaviour
 	[Header("Speed Increment")]
 	public float speed = .1f;
 
-
-	float holdTime;
-	bool ismouseheld;
 	Vector2 currentMousePosition;
 	Vector2 mouseDeltaPosition;
 	Vector2 lastMousePosition;
@@ -46,6 +42,7 @@ public class TouchPad : MonoBehaviour
 				{
 					//Debug.Log(Camera.main.ScreenToWorldPoint(targetObject.transform.position));
 					targetObject.transform.Translate(mouseDeltaPosition.x * speed, mouseDeltaPosition.y * speed, 0f);
+					//targetObject.transform.position = new Vector3(Mathf.Clamp(targetObject.transform.position.x, 0, Display.displays[1].renderingWidth), Mathf.Clamp(targetObject.transform.position.y * speed,0, Display.displays[1].renderingHeight), targetObject.transform.position.z);
 				}
 				else
 				if (movementX)
@@ -61,6 +58,7 @@ public class TouchPad : MonoBehaviour
 				}
 				
 			}
+			
 		
 			lastMousePosition = currentMousePosition;
 		}
@@ -87,7 +85,7 @@ public class TouchPad : MonoBehaviour
     {
         if (draging)
         {
-			if(dragingObj.GetComponent<Dragpbject>()!= null)
+			if(dragingObj!= null)
 			dragingObj.GetComponent<Dragpbject>().IsMoving();
 		}
 		
